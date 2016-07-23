@@ -1,9 +1,9 @@
 /*
- * stub.c
- * Stub driver for giardia
+ * example.c
+ * Example usage of giardia
  * By J. Stuart McMurray
  * Created 20170720
- * Last Modified 20170720
+ * Last Modified 20170722
  */
 
 #include <stdio.h>

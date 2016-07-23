@@ -8,4 +8,4 @@
 
 set -e
 
-cc -o stub -I .. ../giardia.c stub.c
+cc -o example -I .. ../giardia.c example.c

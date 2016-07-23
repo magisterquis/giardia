@@ -3,17 +3,19 @@
  * Library to add a shell to C code
  * By J. Stuart McMurray
  * Created 20170720
- * Last Modified 20170720
+ * Last Modified 20170722
  */
 
 #include <sys/socket.h>
 #include <sys/types.h>
+#include <sys/wait.h>
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
 #include <err.h>
 #include <errno.h>
+#include <signal.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -83,15 +85,21 @@ pid_t
 doublefork(void)
 {
         pid_t ret;
+        int status;
 
         /* Fork off the parent (counting us as the grandparent */
         ret = fork();
         switch (ret) {
                 case 0: /* Parent */
                         break;
-                default: /* Grandparent or error */
+                case -1: /* Error */
                         return ret;
+                default: /* Grandparent */
+                        return waitpid(ret, &status, 0);
         }
+
+        /* Ignore children now */
+        signal(SIGCHLD, SIG_IGN);
 
         /* Fork off the child */
         ret = fork();
